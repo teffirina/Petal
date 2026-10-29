@@ -72,16 +72,16 @@
     const t = s.task;
     const step = P.h.nextStepOf(t);
     return `<section class="pt-next" aria-labelledby="next-h">
-      <p class="pt-eyebrow">${P.ico('target', 'pt-ico--sm')}Suggested next</p>
+      <div class="pt-row next-top"><p class="pt-eyebrow">${P.mark(16)}Suggested next</p>${t.deadline ? `<span class="pt-chip pt-chip--deadline">${P.ico('flag', 'pt-ico--sm')}Due ${P.esc(P.relDate(t.deadline.date).replace(/^(Today|Tomorrow|Yesterday)$/, (m) => m.toLowerCase()))}</span>` : ''}</div>
       <div><h3 id="next-h"><button class="linkbtn on-hero" data-act="openTask" data-id="${t.id}" ${s.occDate ? `data-date="${s.occDate}"` : ''}>${P.esc(s.occDate ? P.occTitle(t, s.occDate) : t.title)}</button></h3>
       <p class="pt-muted body-sm">${[t.projectId ? P.esc(P.projectName(t.projectId)) : '', s.est ? `Estimated ${P.fmtDur(s.est)}` : 'No estimate'].filter(Boolean).join(' · ')}</p></div>
-      <p class="pt-step">${P.ico('steps')}<span>${step ? `Next step: ${P.esc(step)}` : 'No next step yet. Break it down to find one small action.'}</span></p>
-      <div class="pt-row">
+      <p class="pt-step">${P.ico('right')}<span>${step ? P.esc(step) : 'No next step yet. Break it down to find one small action.'}</span></p>
+      <div class="pt-row next-actions">
         <button class="pt-btn pt-btn--primary" data-act="start5" data-id="${t.id}" ${s.occDate ? `data-date="${s.occDate}"` : ''}>${P.ico('play')}Start 5 min</button>
         <button class="pt-btn pt-btn--secondary" data-act="breakdown" data-id="${t.id}">${P.ico('steps')}Break down</button>
-        <button class="pt-btn pt-btn--quiet" data-act="chooseAnother">Choose another</button>
       </div>
-      <details class="why"><summary>Why this task?</summary><ul>${s.reasons.map((r) => `<li>${P.esc(r)}</li>`).join('')}</ul><p>Suggestions never change your plan. Pick any task you like.</p></details>
+      <div class="next-foot"><details class="why"><summary>Why this task?</summary><ul>${s.reasons.map((r) => `<li>${P.esc(r)}</li>`).join('')}</ul><p>Suggestions never change your plan. Pick any task you like.</p></details>
+        <button class="pt-btn pt-btn--quiet next-pick" data-act="chooseAnother">Pick another</button></div>
     </section>`;
   }
   P.act.chooseAnother = () => P.open('choose', {});
@@ -176,9 +176,9 @@
     const pct = full.available ? Math.min(100, Math.round(full.planned / full.available * 100)) : 0;
     const longest = info.gaps.reduce((a, g) => Math.max(a, g[1] - g[0]), 0);
     return `<div class="pt-daybar"><div class="pt-daybar__pie" style="background:conic-gradient(var(--logo) 0 ${pct}%, var(--surface-raised) ${pct}% 100%)" aria-hidden="true"></div>
-      <div class="pt-daybar__text"><span>${info.total ? `You have <b>${P.fmtDur(info.total)}</b> free${isToday ? ' for the rest of today' : ''}` : isToday && P.nowMin() >= info.win[1] ? 'Planning hours are over for today' : 'No free time left in planning hours'}${longest ? ` · longest gap ${P.fmtDur(longest)}` : ''}</span>
+      <div class="pt-daybar__text"><span><b>${P.fmtDur(full.planned)}</b> planned · ${info.total ? `${P.fmtDur(info.total)} free${isToday ? ' left' : ''}` : isToday && P.nowMin() >= info.win[1] ? 'planning hours are over' : 'no free time left'}</span>
       <div class="pt-daybar__track" role="img" aria-label="${pct}% of planning hours scheduled"><div class="pt-daybar__fill" style="width:${pct}%"></div></div>
-      <span class="pt-muted body-sm">${P.fmtDur(full.planned)} scheduled of ${P.fmtDur(full.available)} planning time (${P.fmtMin(info.win[0])}–${P.fmtMin(info.win[1])}, breaks excluded)</span></div></div>`;
+      <span class="pt-muted caption">${longest ? `Longest gap ${P.fmtDur(longest)} · ` : ''}planning ${P.fmtMin(info.win[0])}–${P.fmtMin(info.win[1])}, breaks excluded</span></div></div>`;
   };
 
   /* ---------- week strip ---------- */
@@ -224,22 +224,21 @@
 
     return `<div class="page today">
       <header class="page-h">
-        <div><p class="pt-eyebrow">${isToday ? 'Today' : P.esc(P.relDate(ds))}</p><h1 class="title-1">${P.fmtDate(ds, { weekday: 'long', day: 'numeric', month: 'long' })}</h1></div>
+        <div><p class="pt-eyebrow">${P.fmtDate(ds, { weekday: 'long' })}${isToday ? '' : ` · ${P.esc(P.relDate(ds))}`}</p><h1 class="title-1 day-title">${P.fmtDate(ds, { day: 'numeric', month: 'long' })}</h1></div>
         <div class="pt-row">
           ${!isToday ? `<button class="pt-btn pt-btn--secondary" data-act="todayDate" data-date="${today}">${P.ico('today')}Back to today</button>` : ''}
           <div class="pt-seg" role="group" aria-label="View">
             <button aria-pressed="${view === 'list'}" data-act="todayView" data-v="list">${P.ico('list', 'pt-ico--sm')}List</button>
             <button aria-pressed="${view === 'timeline'}" data-act="todayView" data-v="timeline">${P.ico('timeline', 'pt-ico--sm')}Timeline</button>
           </div>
+          ${isToday ? `<button class="pt-btn pt-btn--secondary" data-act="adjustToday">${P.ico('adjust')}<span>Adjust<span class="hide-sm"> today</span></span></button>` : ''}
         </div>
       </header>
-      ${P.h.week(ds, 'todayDate')}
+      <div class="today-top">${P.h.week(ds, 'todayDate')}${P.h.daybar(ds)}</div>
       <div class="today-grid">
         <div class="stack-lg">
           ${isToday ? nextCard() : ''}
-          ${P.h.daybar(ds)}
-          ${isToday || ds > today ? `<div class="pt-row"><button class="pt-btn pt-btn--secondary" data-act="adjustToday" ${isToday ? '' : 'disabled'} title="${isToday ? '' : 'Adjust today works on today'}">${P.ico('adjust')}Adjust today</button>
-            <button class="pt-btn pt-btn--quiet" data-act="planFromInbox" data-date="${ds}">${P.ico('inbox')}Plan from Inbox</button></div>` : ''}
+          <div class="pt-row"><button class="pt-btn pt-btn--quiet" data-act="planFromInbox" data-date="${ds}">${P.ico('inbox')}Plan from Inbox</button></div>
           ${notices.join('')}
         </div>
         <div class="stack-lg">
