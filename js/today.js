@@ -243,7 +243,7 @@
           ${notices.join('')}
         </div>
         <div class="stack-lg">
-        ${emptyDay ? P.h.empty(isToday ? 'Nothing planned for today yet' : 'Nothing planned for this day', 'Add a task, or pick something from your Inbox.', `${!P.LESSONS_ICS || P.hasLessons() ? '' : `<button class="pt-btn pt-btn--secondary" data-act="loadLessons">${P.ico('planner')}Add my college lessons</button>`}<button class="pt-btn pt-btn--primary" data-act="quickAdd" data-date="${ds}">${P.ico('plus')}Add task</button><button class="pt-btn pt-btn--secondary" data-act="planFromInbox" data-date="${ds}">${P.ico('inbox')}Plan from Inbox</button>`) : ''}
+        ${emptyDay ? P.h.empty(isToday ? 'Nothing planned for today yet' : 'Nothing planned for this day', 'Add a task, or pick something from your Inbox.', `${!P.lessonsAvailable || P.hasLessons() ? '' : `<button class="pt-btn pt-btn--secondary" data-act="loadLessons">${P.ico('planner')}Add my college lessons</button>`}<button class="pt-btn pt-btn--primary" data-act="quickAdd" data-date="${ds}">${P.ico('plus')}Add task</button><button class="pt-btn pt-btn--secondary" data-act="planFromInbox" data-date="${ds}">${P.ico('inbox')}Plan from Inbox</button>`) : ''}
         ${dateOnlyDl.length ? `<section class="stack-sm" aria-label="Deadlines">${dateOnlyDl.map(P.h.deadline).join('')}</section>` : ''}
         ${view === 'list' ? `
           ${schedList.length ? `<section class="stack-sm" aria-labelledby="sch-h"><h2 class="pt-section-h" id="sch-h">Schedule <small>${P.plural(timed.length, 'item')}</small></h2>${schedList.map((x) => x.html).join('')}</section>` : ''}
