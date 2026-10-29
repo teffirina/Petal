@@ -48,9 +48,9 @@
     const projects = P.state.projects.filter((p) => p.status === 'active');
     return `<div class="pl-tools"><div class="pt-row">
         <div class="pt-seg" role="group" aria-label="Period">${['day', 'week', 'month'].map((k) => `<button aria-pressed="${period === k}" data-act="prPeriod" data-v="${k}">${k[0].toUpperCase() + k.slice(1)}</button>`).join('')}</div>
-        <button class="pt-btn pt-btn--icon pt-btn--secondary" data-act="prDate" data-date="${step(-1)}" aria-label="Previous ${period}">${P.ico('left')}</button>
+        <span class="prnav"><button class="pt-btn pt-btn--icon pt-btn--secondary" data-act="prDate" data-date="${step(-1)}" aria-label="Previous ${period}">${P.ico('left')}</button>
         <span class="title-3 prlabel">${P.esc(label)}</span>
-        <button class="pt-btn pt-btn--icon pt-btn--secondary" data-act="prDate" data-date="${step(1)}" aria-label="Next ${period}">${P.ico('right')}</button>
+        <button class="pt-btn pt-btn--icon pt-btn--secondary" data-act="prDate" data-date="${step(1)}" aria-label="Next ${period}">${P.ico('right')}</button></span>
         ${d0 <= P.today() && d1 >= P.today() ? '' : `<button class="pt-btn pt-btn--quiet" data-act="prDate" data-date="${P.today()}">This ${period}</button>`}
       </div></div>
       ${nothingEver ? P.h.empty('No activity recorded yet', 'When you complete a task or run a focus session, it shows up here. Planned time doesn’t count until you do it.', `<a class="pt-btn pt-btn--primary" href="#today">Go to Today</a>`) : `

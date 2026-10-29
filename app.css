@@ -444,3 +444,45 @@ body.has-ov { overflow: hidden; }
   .pt-daybar .caption { display: none; }
   .page.today .page-h .pt-btn--secondary { min-height: 40px; padding: 0 14px; }
 }
+
+/* ---------- Polish pass: softer controls, calmer chrome ---------- */
+:where(select) { appearance: none; -webkit-appearance: none; padding-right: 34px; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23a08294' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 10px center; background-size: 16px; }
+.mini select, .mini input, .filters select, .datejump { border-color: var(--line); border-radius: var(--radius-pill); background-color: var(--surface); padding-left: 14px; }
+.mini input, .datejump { padding-right: 12px; }
+.mini select:hover, .mini input:hover, .filters select:hover, .datejump:hover { border-color: var(--line-strong); }
+
+.topbar { position: sticky; top: 0; z-index: 20; border-bottom-color: transparent; background: color-mix(in srgb, var(--bg) 86%, transparent); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
+
+.tabs { border-bottom: 0; gap: 6px; padding: 2px 0 4px; scrollbar-width: none; }
+.tabs::-webkit-scrollbar { display: none; }
+.tabs a { min-height: 40px; padding: 0 14px; border: 1px solid var(--line); border-radius: var(--radius-pill); margin: 0; font-size: 14px; background: var(--surface); }
+.tabs a:hover { border-color: var(--line-strong); }
+.tabs a[aria-current="page"] { background: var(--petal-tint); border-color: transparent; color: var(--petal-ink); }
+
+.toast { flex-wrap: nowrap; }
+.toast > :first-child { min-width: 0; }
+
+.stat { padding: var(--space-4) var(--space-4) var(--space-3); }
+.stat b { font-size: 34px; line-height: 40px; }
+.stats .stat:first-child { background: var(--hero-gradient); border-color: transparent; color: var(--on-hero); }
+.stats .stat:first-child .pt-eyebrow, .stats .stat:first-child .pt-muted { color: var(--on-hero-muted); }
+
+.wk .pt-item__title { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.wk .pt-item__meta { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.wk .pt-item__tag { display: none; }
+
+.pt-card { transition: border-color .15s ease; }
+.inbox-item .pt-task__title { font-weight: 500; }
+
+@media (max-width: 959px) {
+  .page-h > .pt-btn--primary { display: none; }
+}
+.mini select, .filters select { padding-right: 34px; }
+.prnav { display: inline-flex; align-items: center; gap: var(--space-2); white-space: nowrap; }
+@media (max-width: 520px) {
+  .stat { padding: var(--space-3); }
+  .stat .pt-eyebrow { font-size: 11px; letter-spacing: .06em; }
+  .stat b { font-size: 28px; line-height: 34px; }
+}
+.wk .pt-item__title { white-space: normal; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+.wk .pt-item__meta { text-overflow: clip; }
